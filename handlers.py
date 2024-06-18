@@ -4,7 +4,7 @@ import requests
 from telebot import types
 import wikipediaapi
 import config
-from utils import upload_image_to_imagebb
+from utils import upload_image_to_imagebb, get_neko_image, get_waifu_image, get_nsfw_waifu_image
 
 anonymous_messages = {}
 
@@ -136,26 +136,3 @@ def setup_handlers(bot):
                 bot.send_message(message.chat.id, 'По этим адресам, можно связатся со мной, для чего-либо\nTG - @tapo4eckk\nПочта - godstarkg@gmail.com')    
             else:
                 bot.send_message(message.chat.id, 'Если пропали кнопки, пропиши /start еще раз.')
-
-def get_neko_image():
-    response = requests.get('https://nekos.life/api/v2/img/neko')
-    if response.status_code == 200:
-        data = response.json()
-        return data.get('url')
-    return None
-
-def get_waifu_image(category='waifu'):
-    url = f'https://api.waifu.pics/sfw/{category}'
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        return data.get('url')
-    return None
-
-def get_nsfw_waifu_image(category='waifu'):
-    url = f'https://api.waifu.pics/nsfw/{category}'
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        return data.get('url')
-    return None
