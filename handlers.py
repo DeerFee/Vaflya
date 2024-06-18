@@ -100,31 +100,30 @@ def setup_handlers(bot):
         else:
             bot.reply_to(message, "Не удалось получить изображение waifu.")
 
-@bot.message_handler(content_types=['photo'])
-def handle_photo(message):
-    file_id = message.photo[-1].file_id
-    file_info = bot.get_file(file_id)
-    file_path = file_info.file_path
+    @bot.message_handler(content_types=['photo'])
+    def handle_photo(message):
+        file_id = message.photo[-1].file_id
+        file_info = bot.get_file(file_id)
+        file_path = file_info.file_path
 
-    # Скачиваем изображение
-    image_url = f"https://api.telegram.org/file/bot{bot.token}/{file_path}"
-    image_response = requests.get(image_url)
+        # Скачиваем изображение
+        image_url = f"https://api.telegram.org/file/bot{bot.token}/{file_path}"
+        image_response = requests.get(image_url)
 
-    if image_response.status_code == 200:
-        # Сохраняем изображение временно (в реальном приложении лучше сохранять в более устойчивое хранилище)
-        with open('temp_image.jpg', 'wb') as f:
-            f.write(image_response.content)
+        if image_response.status_code == 200:
+            # Сохраняем изображение временно (в реальном приложении лучше сохранять в более устойчивое хранилище)
+            with open('temp_image.jpg', 'wb') as f:
+                f.write(image_response.content)
 
-        # Загружаем изображение на ImageBB
-        uploaded_url = upload_image_to_imagebb(config.IMAGE_BB_KEY, 'temp_image.jpg')
+            # Загружаем изображение на ImageBB
+            uploaded_url = upload_image_to_imagebb(config.IMAGE_BB_KEY, 'temp_image.jpg')
 
-        if uploaded_url:
-            bot.reply_to(message, f"Изображение успешно загружено. URL: {uploaded_url}")
+            if uploaded_url:
+                bot.reply_to(message, f"Изображение успешно загружено. URL: {uploaded_url}")
+            else:
+                bot.reply_to(message, "Ошибка при загрузке изображения.")
         else:
-            bot.reply_to(message, "Ошибка при загрузке изображения.")
-    else:
-        bot.reply_to(message, "Ошибка при получении изображения.")
-
+            bot.reply_to(message, "Ошибка при получении изображения.")
 
     @bot.message_handler(content_types=['text'])
     def lalala(message):
@@ -132,7 +131,7 @@ def handle_photo(message):
             if message.text == '🎲 Рандомное число':
                 bot.send_message(message.chat.id, str(random.randint(0, 100)))
             elif message.text == 'Список команд':
-                bot.send_message(message.chat.id, '<b>Основные</b>\n/start\n/vova\n/search [запрос] - для поиска информации в Википедии\n\n<b>Арты</b>\n/neko - арты с сайта nekos.life\n/waifu - арты с сайта waifu.pics (с категорией Waifu)\n/waifu_nsfw - арты с сайта waifu.pics/nsfw (с каатегорией Waifu)\n\n<b>Анонимные сообщения</b>\n/send - Отправить сообщение\n/get - Получить сообщение\n\n<b>Отключенные команды</b>\n/ibb - Загрузить картинку на хостинг.', parse_mode="html")
+                bot.send_message(message.chat.id, '<b>Основные</b>\n/start\n/vova\n/search [запрос] - для поиска информации в Википедии\n\n<b>Арты</b>\n/neko - арты с сайта nekos.life\n/waifu - арты с сайта waifu.pics (с категорией Waifu)\n/waifu_nsfw - арты с сайта waifu.pics/nsfw (с категорией Waifu)\n\n<b>Анонимные сообщения</b>\n/send - Отправить сообщение\n/get - Получить сообщение\n\n<b>Отключенные команды</b>\n/ibb - Загрузить картинку на хостинг.', parse_mode="html")
             elif message.text == 'Обратная связь':
                 bot.send_message(message.chat.id, 'По этим адресам, можно связатся со мной, для чего-либо\nTG - @tapo4eckk\nПочта - godstarkg@gmail.com')    
             else:
