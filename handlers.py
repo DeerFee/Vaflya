@@ -3,6 +3,7 @@ import os
 import requests
 from telebot import types
 import wikipediaapi
+import config
 from utils import upload_image_to_imagebb
 
 anonymous_messages = {}
