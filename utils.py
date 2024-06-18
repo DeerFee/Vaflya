@@ -4,7 +4,7 @@ import base64
 def upload_image_to_imagebb(api_key, image_path):
     url = "https://api.imgbb.com/1/upload"
     with open(image_path, "rb") as image_file:
-        encoded_image = base64.b64encode(image_file.read())
+        encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
     
     payload = {
         'key': api_key,
@@ -17,6 +17,7 @@ def upload_image_to_imagebb(api_key, image_path):
         result = response.json()
         return result['data']['url']
     else:
+        print(f"Ошибка {response.status_code}: {response.text}")
         return None
 
 def get_neko_image():
@@ -37,7 +38,7 @@ def get_waifu_image(category='waifu'):
 def get_nsfw_waifu_image(category='waifu'):
     url = f'https://api.waifu.pics/nsfw/{category}'
     response = requests.get(url)
-    if response.status_code == 200:
+    if response.status_code == 200):
         data = response.json()
         return data.get('url')
     return None
