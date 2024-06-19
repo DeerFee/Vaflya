@@ -38,7 +38,7 @@ def get_waifu_image(category='waifu'):
 def get_nsfw_waifu_image(category='waifu'):
     url = f'https://api.waifu.pics/nsfw/{category}'
     response = requests.get(url)
-    if response.status_code == 200):
+    if response.status_code == 200:
         data = response.json()
         return data.get('url')
     return None
