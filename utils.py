@@ -17,7 +17,7 @@ def upload_image_to_imagebb(api_key, image_path):
         result = response.json()
         return result['data']['url']
     else:
-        print(f"Ошибка {response.status_code}: {response.text}")
+        print(f"Ошибка {response.status_code}: {response.json()}")
         return None
 
 def get_neko_image():
@@ -30,7 +30,7 @@ def get_neko_image():
 def get_waifu_image(category='waifu'):
     url = f'https://api.waifu.pics/sfw/{category}'
     response = requests.get(url)
-    if response.status_code == 200):
+    if response.status_code == 200:
         data = response.json()
         return data.get('url')
     return None
