@@ -121,7 +121,7 @@ def setup_handlers(bot):
             if uploaded_url:
                 bbcode = f"[img]{uploaded_url}[/img]"
                 htmlcode = f'<img src="{uploaded_url}" alt="Image"/>'
-                bot.reply_to(message, f"Изображение успешно загружено.\n\nBBCode:\n{bbcode}\n\nHTML:\n{htmlcode}")
+                bot.reply_to(message, f"Изображение успешно загружено.\n\nBBCode:\n```\n{bbcode}\n```\n\nHTML:\n```\n{htmlcode}\n```", parse_mode="Markdown")
             else:
                 bot.reply_to(message, "Ошибка при загрузке изображения.")
         else:
