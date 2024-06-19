@@ -119,7 +119,9 @@ def setup_handlers(bot):
             uploaded_url = upload_image_to_imagebb(config.IMAGE_BB_KEY, 'temp_image.jpg')
 
             if uploaded_url:
-                bot.reply_to(message, f"Изображение успешно загружено. URL: {uploaded_url}")
+                bbcode = f"[img]{uploaded_url}[/img]"
+                htmlcode = f'<img src="{uploaded_url}" alt="Image"/>'
+                bot.reply_to(message, f"Изображение успешно загружено.\n\nBBCode:\n{bbcode}\n\nHTML:\n{htmlcode}")
             else:
                 bot.reply_to(message, "Ошибка при загрузке изображения.")
         else:
