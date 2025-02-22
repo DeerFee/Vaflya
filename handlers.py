@@ -204,8 +204,8 @@ def setup_handlers(bot):
             elif message.text == 'Список команд':
                 commands_text = (
                     '<b>Основные</b>:\n'
-                    '/start\n'
-                    '/vova\n'
+                    '/start - старт бота если пропали кнопки\n'
+                    '/vova - Вова.\n'
                     '/search [запрос] - для поиска информации в Википедии\n\n'
                     '<b>Арты</b>\n'
                     '/neko - арты с сайта <a href="nekos.life">Nekos</a>\n'
