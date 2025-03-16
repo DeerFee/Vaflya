@@ -22,7 +22,7 @@ IMAGE_BB_KEY = 'YOUR_IMAGE_BB_KEY' # Сюда ключ доступа к API д�
 **Арты**  
 `/neko - арты с сайта [Nekos](http://nekos.life)`  
 `/waifu - арты с сайта [Waifu](http://waifu.pics)`  
-`/waifu_nsfw - арты с сайта [Waifu](http://waifu.pics) (Категория NSFW)`  
+`/waifu_nsfw - арты с сайта [Waifu](http://waifu.pics) (Категория NSFW)`
 
 **Аниме**  
 `/anime [Название Аниме] - Поиск аниме по базе [Шикимори](http://shikimori.one/)`  
