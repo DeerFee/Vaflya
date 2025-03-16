@@ -143,3 +143,32 @@ class Database:
             
         conn.commit()
         conn.close()
+
+    def get_user_by_username(self, username: str) -> Optional[Dict]:
+        """Получение информации о пользователе по username"""
+        conn = sqlite3.connect(self.db_file)
+        cur = conn.cursor()
+        
+        cur.execute('''
+        SELECT users.*, user_settings.notifications_enabled, user_settings.language
+        FROM users 
+        LEFT JOIN user_settings ON users.user_id = user_settings.user_id
+        WHERE users.username = ?
+        ''', (username,))
+        
+        result = cur.fetchone()
+        conn.close()
+        
+        if result:
+            return {
+                'user_id': result[0],
+                'username': result[1],
+                'first_name': result[2],
+                'last_name': result[3],
+                'rating': result[4],
+                'registration_date': result[5],
+                'last_activity': result[6],
+                'notifications_enabled': result[7],
+                'language': result[8]
+            }
+        return None
