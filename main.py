@@ -4,9 +4,13 @@ from handlers import setup_handlers
 import logging
 import asyncio
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
+from database import Database
+
+# Инициализация базы данных
+db = Database()
 
 bot = telebot.TeleBot(config.TOKEN)
-setup_handlers(bot)
+setup_handlers(bot, db)  # Передаем экземпляр базы данных в обработчики
 
 async def main():
     application = Application.builder().token(config.TOKEN).build()

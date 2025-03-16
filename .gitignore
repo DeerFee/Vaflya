@@ -1,4 +1,24 @@
-test.py
+# База данных SQLite
+*.db
+
+# Конфигурационные файлы
 config.py
+
+# Кэш Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Виртуальное окружение
+venv/
+env/
+.env/
+db_brows/
+
+# IDE
+.idea/
+.vscode/
+
+# Временные файлы
+*.log
+*.tmp

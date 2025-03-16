@@ -39,7 +39,71 @@ def search_anime(query):
         logger.error(f"Error during API request: {e}")
         return None
 
-def setup_handlers(bot):
+def setup_handlers(bot, db):
+    @bot.message_handler(commands=['start'])
+    def start(message):
+        # Добавляем пользователя в базу данных
+        db.add_user(
+            user_id=message.from_user.id,
+            username=message.from_user.username,
+            first_name=message.from_user.first_name,
+            last_name=message.from_user.last_name
+        )
+        
+        sti = open('static/pepeez.webp', 'rb')
+        bot.send_sticker(message.chat.id, sti)
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        item1 = types.KeyboardButton("🎲 Рандомное число")
+        item2 = types.KeyboardButton("Список команд")
+        item3 = types.KeyboardButton("Обратная связь")
+        item4 = types.KeyboardButton("Мой профиль")  # Добавляем новую кнопку
+        markup.add(item1, item2, item3, item4)
+
+        bot.send_message(message.chat.id, 
+                        f"Здарова попущенец!\nЯ - <b>{bot.get_me().first_name}</b>.\nЯ создан для тестов ", 
+                        parse_mode="html", 
+                        reply_markup=markup)
+
+    @bot.message_handler(commands=['profile'])
+    def profile(message):
+        # Получаем информацию о пользователе из базы данных
+        user_info = db.get_user(message.from_user.id)
+        if user_info:
+            profile_text = (
+                f"👤 *Ваш профиль*\n\n"
+                f"🆔 ID: `{user_info['user_id']}`\n"
+                f"👤 Имя: {user_info['first_name']}\n"
+                f"📝 Username: @{user_info['username']}\n"
+                f"⭐️ Рейтинг: {user_info['rating']}\n"
+                f"📅 Дата регистрации: {user_info['registration_date']}\n"
+                f"🌍 Язык: {user_info['language']}\n"
+                f"🔔 Уведомления: {'Включены' if user_info['notifications_enabled'] else 'Выключены'}"
+            )
+            bot.send_message(message.chat.id, profile_text, parse_mode="Markdown")
+        else:
+            bot.send_message(message.chat.id, "Профиль не найден. Используйте /start для регистрации.")
+
+    @bot.message_handler(commands=['settings'])
+    def settings(message):
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton("🔔 Уведомления", callback_data="toggle_notifications"))
+        markup.add(types.InlineKeyboardButton("🌍 Язык", callback_data="change_language"))
+        
+        bot.send_message(message.chat.id, "⚙️ Настройки:", reply_markup=markup)
+
+    @bot.callback_query_handler(func=lambda call: True)
+    def callback_handler(call):
+        if call.data == "toggle_notifications":
+            user_info = db.get_user(call.from_user.id)
+            new_status = not user_info['notifications_enabled']
+            db.update_user_settings(call.from_user.id, notifications_enabled=new_status)
+            status_text = "включены" if new_status else "выключены"
+            bot.answer_callback_query(call.id, f"Уведомления {status_text}")
+            bot.edit_message_text(
+                f"⚙️ Настройки обновлены!\nУведомления {status_text}",
+                call.message.chat.id,
+                call.message.message_id
+            )
 
     @bot.message_handler(commands=['start'])
     def start(message):
@@ -213,7 +277,11 @@ def setup_handlers(bot):
                     '/waifu_nsfw - арты с сайта <a href="waifu.pics">Waifu</a> (Категория <b>NSFW</b>)\n\n'
                     '<b>Плюшки</b>\n'
                     '/anime [Навзание Аниме] - Поиск аниме по базе <a href="shikimori.one">Шикимори</a>\n'
-                    'Так же, если вы отправите боту картинку, он автоматом зальет её на <a href="https://imgbb.com">ImgBB</a>'
+                    'Так же, если вы отправите боту картинку, он автоматом зальет её на <a href="https://imgbb.com">ImgBB</a>\n\n'
+                    '<b>Профиль:</b>\n'
+                    '/profile - Посмотреть свой профиль\n'
+                    '/settings - Настройки бота'
+
                 )
                 bot.send_message(
                     message.chat.id,
@@ -229,4 +297,5 @@ def setup_handlers(bot):
                 )
             else:
                 bot.send_message(message.chat.id, 'Если пропали кнопки, пропиши /start еще раз.')
+
 
