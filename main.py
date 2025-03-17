@@ -10,7 +10,14 @@ from database import Database
 db = Database()
 
 bot = telebot.TeleBot(config.TOKEN)
-setup_handlers(bot, db)  # Передаем экземпляр базы данных в обработчики
+setup_handlers(bot, db)
+
+async def start(update, context):
+    await update.message.reply_text('Привет! Я бот. Чем могу помочь?')
+
+async def handle_message(update, context):
+    text = update.message.text
+    await update.message.reply_text(f'Вы написали: {text}')
 
 async def main():
     application = Application.builder().token(config.TOKEN).build()

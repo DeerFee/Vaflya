@@ -1,5 +1,6 @@
 # База данных SQLite
 *.db
+db_brows/
 
 # Конфигурационные файлы
 config.py
@@ -13,7 +14,7 @@ __pycache__/
 venv/
 env/
 .env/
-db_brows/
+
 
 # IDE
 .idea/
